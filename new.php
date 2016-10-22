@@ -1,3 +1,58 @@
+<?php
+    // echo '<br>';
+    // echo '<br>';
+    //①DBと接続
+    $dsn = 'mysql:dbname=myfriends;host=localhost';
+    $user = 'root';
+    $password = '';
+    $dbh = new PDO($dsn, $user, $password);
+    $dbh->query('SET NAMES utf8');
+
+    $sql = 'SELECT * FROM `areas` WHERE 1';
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute();
+
+    $areas = array();
+
+    while(1){
+      $rec = $stmt->fetch(PDO::FETCH_ASSOC);
+      if ($rec == false) {
+         break;
+        }
+        $areas[] = $rec;
+    }
+
+      // $date = array();
+      //$_POSTとはPHPにあらかじめ用意されたスーパーグローバル変数
+      //Formからmethod="post"で送信された際、内部で$_POSTが生成される
+      //$_POSTはFormの要素に指定されたキー(name)と実際に入力された値(value)で構成された連想配列です。
+      //$_POST = array("name"=>"友達11","area_id"=>10,"gender"=>1,"age"=27);
+
+
+    if(!empty($_POST)){
+      $sql = 'INSERT INTO `friends` set `friend_name` = ?,`area_id` = ?,`gender`= ?,`age` = ?,`created` = now()';
+      // $sql = 'INSERT INTO `friends`(`friend_name`,`area_id`,`gender`,`age`,`created`) VALUES (?,?,?,?,now())';
+      $date[] = $_POST['name'];
+      $date[] = $_POST['area_id'];
+      $date[] = $_POST['gender'];
+      $date[] = $_POST['age'];
+      //$_POSTに格納された送信データをechoを使って全件出力
+      //登録処理実装
+      $stmt = $dbh->prepare($sql);
+      $stmt->execute($date);
+
+      // echo '<pre>';
+      // var_dump($_POST);
+      // echo '</pre>';
+
+      header('Location: index.php');
+      //登録された都道府県に飛ぶ
+      exit();
+    }
+    $dbh = null;
+?>
+
+
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -8,11 +63,11 @@
     <title>myFriends</title>
 
     <!-- Bootstrap -->
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <link href="../assets/font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="../assets/css/form.css" rel="stylesheet">
-    <link href="../assets/css/timeline.css" rel="stylesheet">
-    <link href="../assets/css/main.css" rel="stylesheet">
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="assets/css/form.css" rel="stylesheet">
+    <link href="assets/css/timeline.css" rel="stylesheet">
+    <link href="assets/css/main.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -62,11 +117,9 @@
               <div class="col-sm-10">
                 <select class="form-control" name="area_id">
                   <option value="0">出身地を選択</option>
-                  <option value="1">北海道</option>
-                  <option value="2">青森</option>
-                  <option value="3">岩手</option>
-                  <option value="4">宮城</option>
-                  <option value="5">秋田</option>
+                  <?php foreach ($areas as $area) : ?>
+                  <option value="<?php echo $area['area_id']; ?>"><?php echo $area['area_name']; ?></option>
+                  <?php endforeach ; ?>
                 </select>
               </div>
             </div>
@@ -75,9 +128,9 @@
               <label class="col-sm-2 control-label">性別</label>
               <div class="col-sm-10">
                 <select class="form-control" name="gender">
-                  <option value="0">性別を選択</option>
-                  <option value="1">男性</option>
-                  <option value="2">女性</option>
+                  <option value="">性別を選択</option>
+                  <option value="0">男性</option>
+                  <option value="1">女性</option>
                 </select>
               </div>
             </div>
@@ -88,8 +141,7 @@
                 <input type="text" name="age" class="form-control" placeholder="例：27">
               </div>
             </div>
-
-          <input type="submit" class="btn btn-default" value="登録">
+            <input type="submit" class="btn btn-default" value="登録">
         </form>
       </div>
 
