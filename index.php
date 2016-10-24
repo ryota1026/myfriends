@@ -6,8 +6,7 @@
     $dbh = new PDO($dsn, $user, $password);
     $dbh->query('SET NAMES utf8');
     // ②DBからareasテーブルの情報を取得する
-    $sql = 'SELECT * FROM `areas` WHERE 1';
-    // $sql = 'SELECT `areas`.`area_id`, `areas`.`area_name`, COUNT(`freind_id`) AS friends_cnt FROM `areas` LEFT JOIN `friends` ON `areas`.`area_id`=`friends`.`area_id` GROUP BY `areas`.`area_id`, `areas`.`area_name` ORDER BY `areas`.`area_id`';
+    $sql = 'SELECT `areas`.`area_id`, `areas`.`area_name`, COUNT(`friends`.`friend_id`) AS friends_cnt FROM `areas` LEFT JOIN `friends` ON `areas`.`area_id` = `friends`.`area_id` GROUP BY `areas`.`area_id`, `areas`.`area_name` ORDER BY `areas`.`area_id`';
 
     $stmt = $dbh->prepare($sql);
     $stmt->execute();
@@ -29,19 +28,12 @@
       // echo $rec['area_name'];
       // echo '<br>';
     }
-    // var_dump がどのようなものか、簡単にいうと、引数として指定した変数の内容や命令の返値を画面上に出力するものとなります。
+
     // var_dump($areas);
     // echo '<br>';
     // echo '<br>';
     // echo '<br>';
     // echo count($areas);
-
-    // $count = 0;
-    //   while (1) {
-    //    if($areas['area_id'] == $friends['area_id']) {
-    //     $count++;
-    //    }
-    // }
 
     $dbh = null;
 
@@ -124,8 +116,7 @@
               </td>
               <td>
                 <div class="text-center">
-                3
-                <!-- <?php echo $area['friends_cnt']; ?> -->
+                  <?php echo $area['friends_cnt']; ?>
                 </div>
               </td>
             </tr>
