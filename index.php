@@ -2,7 +2,7 @@
     //①DBへ接続
     $dsn = 'mysql:dbname=myfriends;host=localhost';
     $user = 'root';
-    $password='';
+    $password='mysql';
     $dbh = new PDO($dsn, $user, $password);
     $dbh->query('SET NAMES utf8');
     // ②DBからareasテーブルの情報を取得する
@@ -34,6 +34,19 @@
     // echo '<br>';
     // echo '<br>';
     // echo count($areas);
+
+    // $sql ='SELECT COUNT(`friend_id`) AS friends_cnt FROM `friends` WHERE `area_id` = 3';
+    // $stmt = $dbh->prepare($sql);
+    // $stmt->execute();
+    // $rec = $stmt->fetch(PDO::FETCH_ASSOC);
+    // echo '<br>';
+    // echo '<br>';
+    // echo '<pre>';
+    // var_dump($rec);
+    // echo '</pre>';
+
+
+
 
     $dbh = null;
 

@@ -1,12 +1,12 @@
  <?php
-    echo '<br>';
-    echo '<br>';
+    // echo '<br>';
+    // echo '<br>';
 
     // ここにDBに登録する処理を記述する
     // ①DBへ接続
     $dsn = 'mysql:dbname=myfriends;host=localhost';
     $user = 'root';
-    $password = '';
+    $password = 'mysql';
     $dbh = new PDO($dsn, $user, $password);
     $dbh->query('SET NAMES utf8');
 
@@ -131,15 +131,15 @@
                 <select class="form-control" name="area_id">
                   <option value="0">出身地を選択</option>
                   <?php foreach ($areas as $area) : ?>
-                  <?php if ($area['area_id'] == $friends['area_id']) : ?>
-                    <option value="<?php echo $area['area_id']; ?>" selected>
-                      <?php echo $area['area_name']; ?>
-                    </option>
-                  <?php else: ?>
-                     <option value="<?php echo $area['area_id'];?>">
-                     <?php echo $area['area_name']; ?>
-                     </option>
-                   <?php endif ; ?>
+                    <?php if ($area['area_id'] == $friends['area_id']) : ?>
+                      <option value="<?php echo $area['area_id']; ?>" selected>
+                        <?php echo $area['area_name']; ?>
+                      </option>
+                    <?php else : ?>
+                      <option value="<?php echo $area['area_id'];?>">
+                        <?php echo $area['area_name']; ?>
+                      </option>
+                  <?php endif ; ?>
                 <?php endforeach ; ?>
                 </select>
               </div>

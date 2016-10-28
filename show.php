@@ -4,15 +4,14 @@
     //①DBと接続
     $dsn = 'mysql:dbname=myfriends;host=localhost';
     $user = 'root';
-    $password='';
+    $password='mysql';
     $dbh = new PDO($dsn, $user, $password);
     $dbh->query('SET NAMES utf8');
     //areaテーブルからパラメータのarea_idを使用してデータ1レコードを取得
     //$_GET = array('area_id'=>'20');
     //②GETパラメータを取得
     if(!empty($_GET['action']) && $_GET['action'] == 'delete') {
-      $sql = 'DELETE FROM `friends` WHERE `friend_id` = ?';
-      $date[] = $_GET['friend_id'];
+      $sql = 'DELETE FROM `friends` WHERE `friend_id` = '.$_GET['friend_id'];
       $stmt = $dbh->prepare($sql);
       $stmt->execute($date);
 
@@ -61,7 +60,6 @@
 
     }
 
-   
 
     $dbh = null;
 
@@ -153,20 +151,21 @@
     </div>
   </div>
 
-      <script>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
         function destroy(friend_id) {
-          if(confirm('削除しますか？') == true) {
-            //location.href=''で指定された''のページに飛ぶ
-            location.href = 'show.php?action=delete&friend_id=<?php echo $friend['friend_id']; ?>';
+          var del = confirm('削除しますか？');
+          if(del == true) {
+            //OKを押すとtrueを返し、cancelを押すとfalseを返す
+            //location.href=''で指定された''のページに飛ぶ。PHPでいうheader関数と一緒
+            location.href = 'show.php?action=delete&friend_id=' + friend_id;
             return true;
           } else {
             return false;
           }
         }
-      </script>
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    </script>
   </body>
 </html>
